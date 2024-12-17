@@ -40,6 +40,9 @@ jobs:
       run: npm run build
 
     - name: List Available Artisan Commands (for debugging)
+      run: php artisan -V
+
+    - name: List Available Artisan Commands (for debugging)
       run: php artisan list
 
     - name: Run Laravel Tests
