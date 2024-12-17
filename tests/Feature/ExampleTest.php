@@ -16,4 +16,18 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_hello_message()
+    {
+        // Send a GET request to the /hello route
+        $response = $this->getJson('/api/hello');
+
+        // Assert that the response status is 200
+        $response->assertStatus(200);
+
+        // Assert that the response message equals 'Hello, World!'
+        $response->assertJson([
+            'message' => 'Hello, World!'
+        ]);
+    }
 }
