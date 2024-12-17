@@ -1,37 +1,49 @@
-name: Deploy Laravel Application to Production Server
+name: Test Laravel Application
+
 on:
   push:
     branches:
-      - master
+      - master  # Trigger on push to master branch
+  pull_request:
+    branches:
+      - master  # Trigger on pull requests targeting the master branch
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment for the runner
 
     steps:
+    # Step 1: Checkout the latest code from the repository
     - name: Checkout Code
       uses: actions/checkout@v3
 
+    # Step 2: Set up PHP for Laravel
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: 8.3
+        php-version: 8.3  # Set PHP version to 8.3 (adjust as needed)
 
+    # Step 3: Install Composer dependencies
     - name: Install Composer Dependencies
       run: composer install --optimize-autoloader --no-dev --no-progress --no-interaction --prefer-dist
 
-    - name: Install Node
+    # Step 4: Set up Node.js for frontend assets (e.g., using Laravel Mix)
+    - name: Install Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20'
+        node-version: '20'  # Set the Node.js version to 20
 
+    # Step 5: Install NPM dependencies
     - name: Install NPM Dependencies
       run: npm install
 
+    # Step 6: Build the NPM assets (compile frontend assets)
     - name: Build NPM Assets
       run: npm run build
 
-      
-    - name: Lint PHP code
-      run: composer run-script lint
+    # Step 7: Run Laravel tests
+    - name: Run tests
+      run: php artisan test
+
+
 
