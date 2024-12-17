@@ -3,47 +3,44 @@ name: Test Laravel Application
 on:
   push:
     branches:
-      - master  # Trigger on push to master branch
+      - master
   pull_request:
     branches:
-      - master  # Trigger on pull requests targeting the master branch
+      - master
 
 jobs:
   test:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu environment for the runner
+    runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the latest code from the repository
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # Step 2: Set up PHP for Laravel
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: 8.3  # Set PHP version to 8.3 (adjust as needed)
+        php-version: 8.3
 
-    # Step 3: Install Composer dependencies
     - name: Install Composer Dependencies
       run: composer install --optimize-autoloader --no-dev --no-progress --no-interaction --prefer-dist
 
-    # Step 4: Set up Node.js for frontend assets (e.g., using Laravel Mix)
+    # Regenerate Composer Autoload
+    - name: Dump Composer Autoload
+      run: composer dump-autoload
+
     - name: Install Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20'  # Set the Node.js version to 20
+        node-version: '20'
 
-    # Step 5: Install NPM dependencies
     - name: Install NPM Dependencies
       run: npm install
 
-    # Step 6: Build the NPM assets (compile frontend assets)
     - name: Build NPM Assets
       run: npm run build
 
-    # Step 7: Run Laravel tests
-    - name: Run tests
+    - name: List Available Artisan Commands (for debugging)
+      run: php artisan list
+
+    - name: Run Laravel Tests
       run: php artisan test
-
-
-
