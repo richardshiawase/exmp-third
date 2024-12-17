@@ -31,19 +31,13 @@ jobs:
     - name: Build NPM Assets
       run: npm run build
 
-    - name: Synchronize Files To Server
-      uses: easingthemes/ssh-deploy@v2.1.5
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        SOURCE: "."
-        TARGET: "/var/www/html/richardshiawase.com"
 
-    - name: Run Remote/Artisan Commands
-      uses: appleboy/ssh-action@v0.1.6
-      with:
+    - name: Run tests
+      run: |
+        php artisan test
 
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          cd /var/www/html/richardshiawase.com
-          php artisan migrate --force
-          php artisan optimize
+      
+    - name: Lint PHP code
+      run: |
+        composer run-script lint
+
