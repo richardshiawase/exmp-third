@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
 
 jobs:
   test:
@@ -38,7 +35,7 @@ jobs:
     - name: Build NPM Assets
       run: npm run build
 
-    - name: List Available Artisan Commands (for debugging)
+    - name: Getting version
       run: php artisan -V
 
     - name: List Available Artisan Commands (for debugging)
